@@ -21,7 +21,7 @@ div#main-content {
 
 div#navigation {
    max-width: 200px;
-   z-index: 1;
+   z-index: 2;
 }
 
 div#content {
@@ -32,9 +32,17 @@ div#nav-button-div {
    position: fixed;
    top: 1em;
    left: 1em;
-   z-index: 2;
+   z-index: 3;
    overflow: visible;
    display: none;
+}
+
+div#transpose-button-div {
+   position: fixed;
+   top: 1em;
+   right: 1em;
+   z-index: 1;
+   overflow: visible;
 }
 
 div#nav-button-div.expanded {

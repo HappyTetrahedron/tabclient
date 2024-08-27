@@ -23,6 +23,17 @@
                 <span v-else>☰</span>
             </button>
         </div>
+        <div id="transpose-button-div">
+            <button @click="transposeDown" id="transpose-down" class="transpose">
+                ▼
+            </button>
+            <span id="transpose-index">
+                {{ transposeIndex }}
+            </span>
+            <button @click="transposeUp" id="transpose-up" class="transpose">
+                ▲
+            </button>
+        </div>
         <div :class="navExpanded ? 'expanded' : 'hidden'" id="navigation">
             <p v-for="song in songlist">
                 <a @click="selectSong(song.path)">
@@ -58,11 +69,11 @@
                         </p>
                         <p class="chords" v-if="line.type == 'chords'">
                             <span class="chord" v-for="part in line.items">
-                                {{ part.chord }}
+                                {{ getTransposedChord(part) }}
                             </span>
                         </p>
                         <p class="annotated" v-if="line.type == 'lyrics-annotated'">
-                            <span v-for="part in line.items" :class="part.type == 'chord' ? 'chord' : 'lyric'"><template v-if="part.type == 'lyric'">{{ part.line }}</template><sup v-if="part.type == 'chord'">{{ part.chord }}</sup></span>
+                            <span v-for="part in line.items" :class="part.type == 'chord' ? 'chord' : 'lyric'"><template v-if="part.type == 'lyric'">{{ part.line }}</template><sup v-if="part.type == 'chord'">{{ getTransposedChord(part) }}</sup></span>
                         </p>
                     </div>
                 </div>
