@@ -1,0 +1,95 @@
+/* This stylesheet is used for arranging things on the page.
+   It defines where things are, but not what they look like. */
+
+html {
+   height: 100%;
+}
+
+body {
+   height: calc(100% - 6em);
+   padding: 0;
+   margin: 0;
+}
+
+div#main-content {
+   max-width: 800px;
+   margin: auto;
+   margin-top: 3em;
+   padding: 1em;
+   display: flex;
+}
+
+div#navigation {
+   max-width: 200px;
+   z-index: 1;
+}
+
+div#content {
+   padding-left: 1em;
+}
+
+div#nav-button-div {
+   position: fixed;
+   top: 1em;
+   left: 1em;
+   z-index: 2;
+   overflow: visible;
+   display: none;
+}
+
+div#nav-button-div.expanded {
+   right: 1em;
+   left: auto;
+}
+
+@media screen and (max-width: 800px) {
+   body {
+      height: 100%;
+   }
+   div#main-content {
+      margin-top: 0!important;
+   }
+
+   div#navigation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      overflow-x: auto scroll;
+      padding: 1em;
+   }
+
+   div#navigation.expanded {
+      width: 100%;
+   }
+   div#navigation.hidden {
+      display: none;
+   }
+   div#nav-button-div {
+      display: block;
+   }
+}
+
+/* chord positioning */
+
+p.chords span.chord {
+    margin-right: 0.5em;
+}
+
+p.annotated {
+   line-height: 2em;
+}
+
+p.annotated sup {
+    display: inline-block;
+    position: relative;
+    top: auto;
+    width: 0;
+    bottom: 1em;
+}
+
+span.lyric {
+    white-space: pre-wrap;
+}

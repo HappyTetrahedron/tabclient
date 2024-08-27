@@ -1,0 +1,148 @@
+/* This stylesheet is used for styling things.
+   It defines what things look like, but not where they are. */
+
+/* Color definitions */
+
+:root {
+    /* --accent-color: #74cacf; */
+    --accent-color: #99af64;
+    --chord-color: var(--accent-color);
+    --link-color: #73893f;
+    --link-color-dark: #606e39;
+
+    --text-background: #f6f6f6;
+    --text-soft: #8a9278;
+}
+
+/* General styling */
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    background: url(assets/noise.png) repeat, var(--accent-color);
+}
+
+div#main-content {
+    background-color: var(--text-background);
+    border-radius: 3px;
+    box-shadow: 0px 0px 10px 0px var(--link-color);
+}
+
+div#navigation {
+    border-right: 1px solid var(--text-soft);
+    background-color: var(--text-background);
+}
+
+@media screen and (max-width: 800px) {
+    div#main-content {
+        border-radius: 0px;
+        box-shadow: none;
+    }
+
+    body {
+        background-color: var(--text-background);
+    }
+}
+
+/* Chords */
+.chord {
+    color: var(--accent-color);
+    font-size: small;
+    font-weight: bold;
+}
+
+.chord sup {
+    font-size: small;
+}
+
+p.comment {
+    color: var(--text-soft);
+    font-style: italic;
+}
+
+/* Links */
+a:hover {
+    color: var(--link-color-dark);
+}
+
+a {
+    color: var(--link-color);
+    cursor: pointer;
+}
+
+a.active {
+    color: var(--accent-color-dark);
+}
+
+/* Loading indicator */
+
+div.loading {
+    padding-top: 1em;
+}
+
+img.loading {
+    width: 100px;
+}
+
+/* Refresh indicator */
+
+div.refresh {
+    display: flex;
+    align-items: center;
+}
+
+img.refresh {
+    margin-left: 0.5em;
+}
+
+/* Empty states */
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+}
+
+/* Lists */
+
+ul {
+    padding-left: 0;
+}
+
+li {
+    list-style-type: none;
+    margin-bottom: 0.2em;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--accent-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--link-color);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--link-color-dark);
+}
+
+@media screen and (max-width: 800px) {
+
+::-webkit-scrollbar-track {
+  background: var(--text-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-soft);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--link-color);
+}
+
+}
