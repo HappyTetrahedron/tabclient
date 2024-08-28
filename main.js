@@ -10,6 +10,6 @@ app.mount();
 
 Store.store.init();
 
-Router.restoreState(Store.store, window.location.pathname.trim('/'));
+Router.restoreState(Store.store, window.location.pathname);
 
 addEventListener("popstate", (event) => {Router.restoreState(Store.store, event.state)})

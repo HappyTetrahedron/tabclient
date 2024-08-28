@@ -1,2 +1,2 @@
-export const WS_URI = "/ws"
-export const API_URI = "/api/"
+export const WS_URI = "/api/sessions/"
+export const API_URI = "/api/songs/"

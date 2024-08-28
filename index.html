@@ -6,13 +6,13 @@
     <meta name="author" content="HappyTetrahedron">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <script type="module" src="main.js"></script>
+    <script type="module" src="/main.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Source Sans Pro' rel='stylesheet'>
-    <link rel="stylesheet" href="layout.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/layout.css" />
+    <link rel="stylesheet" href="/style.css" />
     <link rel="icon" type="image/x-icon" href="assets/favicon.png">
 </head>
 <body>
@@ -24,19 +24,22 @@
             </button>
         </div>
         <div id="transpose-button-div">
-            <button @click="transposeDown" id="transpose-down" class="transpose">
+            <button @click="onTransposeDownPressed" id="transpose-down" class="transpose">
                 ▼
             </button>
             <span v-if="transposeIndex != 0" id="transpose-index">
                 {{ transposeIndex }} 5th
             </span>
-            <button @click="transposeUp" id="transpose-up" class="transpose">
+            <button @click="onTransposeUpPressed" id="transpose-up" class="transpose">
                 ▲
             </button>
         </div>
         <div :class="navExpanded ? 'expanded' : 'hidden'" id="navigation">
+            <form v-on:submit="connectSession" autocomplete="off">
+                <input id="session-id" v-model="sessionIdInput" placeholder="Session ID" autocomplete="off" />
+            </form>
             <p v-for="song in songlist">
-                <a @click="selectSong(song.path)">
+                <a @click="onSongTitlePressed(song.path)">
                     <span v-if="song.title" class="nav-song-title">
                         {{song.title}}
                     </span>

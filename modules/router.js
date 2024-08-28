@@ -1,7 +1,15 @@
 export function pushCurrentUri(song_path) {
-    history.pushState(song_path, "", song_path);
+    history.pushState(song_path, "", "/" + song_path);
 }
 
-export function restoreState(store, song_path) {
-    store.selectSong(song_path, true)
+export function restoreState(store, uri) {
+    if (uri.startsWith("/")) {
+        uri = uri.substr(1)
+    }
+    console.log(uri);
+    if (uri.startsWith('session/')) {
+        store.connectSessionById(uri.substr(8))
+        return
+    }
+    store.selectSong(uri, true)
 }

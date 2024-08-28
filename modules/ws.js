@@ -1,8 +1,8 @@
 import * as Config from "../configuration.js"
 
-export function connect() {
+export function connect(sessionId) {
     return new Promise(function(resolve, reject) {
-        var conn = new WebSocket(`wss://${document.location.host}${Config.WS_URI}`);
+        var conn = new WebSocket(`wss://${document.location.host}${Config.WS_URI}${sessionId}`);
         conn.onopen = function() {
             resolve(conn);
         }
@@ -10,9 +10,4 @@ export function connect() {
             reject(err)
         }
     })
-}
-
-export async function fetchApi() {
-    let response = await fetch(Config.API_URI);
-    return await response.json();
 }
