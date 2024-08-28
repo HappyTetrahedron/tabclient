@@ -29,6 +29,7 @@ export const store = reactive({
     server: null,
 
     transpose: 0,
+    transposeIndex: 0,
 
     navExpanded: true,
 
@@ -46,6 +47,7 @@ export const store = reactive({
         }
         this.songLoaded = false;
         this.transpose = 0;
+        this.transposeIndex = 0;
         await Api.fetchSong(songId)
             .then(s => this.setCurrentSong(s));
     },
@@ -54,24 +56,22 @@ export const store = reactive({
         if (this.transpose == 0) {
             return chord.chord;
         }
+        if (!('scale_index' in chord)) {
+            return chord.chord;
+        }
         let newChordSym = notes[(chord.scale_index + this.transpose) % 12]
         let ind = sharps.includes(chord.scale_index) ? 2 : 1
         return newChordSym + chord.chord.substring(ind)
     },
 
-    get transposeIndex() {
-        if (this.transpose > 6) {
-            return this.transpose - 12
-        }
-        return this.transpose
-    },
-
     transposeUp() {
-        this.transpose = (this.transpose + 1) % 12;
+        this.transpose = (this.transpose + 7) % 12;
+        this.transposeIndex++;
     },
 
     transposeDown() {
-        this.transpose = (this.transpose + 11) % 12;
+        this.transpose = (this.transpose + 5) % 12;
+        this.transposeIndex--;
     },
 
     toggleNav() {

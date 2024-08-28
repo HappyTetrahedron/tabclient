@@ -27,8 +27,8 @@
             <button @click="transposeDown" id="transpose-down" class="transpose">
                 ▼
             </button>
-            <span id="transpose-index">
-                {{ transposeIndex }}
+            <span v-if="transposeIndex != 0" id="transpose-index">
+                {{ transposeIndex }} 5th
             </span>
             <button @click="transposeUp" id="transpose-up" class="transpose">
                 ▲
