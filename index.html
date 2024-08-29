@@ -24,6 +24,9 @@
             </button>
         </div>
         <div id="transpose-button-div">
+            <button @click="toggleChords" id="chords-toggle" class="chords-toggle">
+                <span v-if="showChords">🖹</span><span v-else>𝄝</span>
+            </button>
             <button @click="onTransposeDownPressed" id="transpose-down" class="transpose">
                 ▼
             </button>
@@ -58,7 +61,7 @@
                     {{ currentSong.metadata.artist }}
                 </p>
                 <div id="song-lines">
-                    <div class="song-line" v-for="line in currentSong.content">
+                    <div class="song-line" :class="{'chords': showChords, 'lyrics': !showChords}" v-for="line in currentSong.content">
                         <h2 class="section" :id="'section' + line.index" v-if="line.type == 'section'">
                             {{ line.text }}
                         </h2>
@@ -70,13 +73,16 @@
                                 {{ part.line }}
                             </span>
                         </p>
-                        <p class="chords" v-if="line.type == 'chords'">
+                        <p class="chords" v-if="line.type == 'chords' && showChords">
                             <span class="chord" v-for="part in line.items">
                                 {{ getTransposedChord(part) }}
                             </span>
                         </p>
+                        <p class="comment" v-if="line.type == 'chords' && !showChords">
+                            instrumental
+                        </p>
                         <p class="annotated" v-if="line.type == 'lyrics-annotated'">
-                            <span v-for="part in line.items" :class="part.type == 'chord' ? 'chord' : 'lyric'"><template v-if="part.type == 'lyric'">{{ part.line }}</template><sup v-if="part.type == 'chord'">{{ getTransposedChord(part) }}</sup></span>
+                            <span v-for="part in line.items" :class="part.type == 'chord' ? 'chord' : 'lyric'"><template v-if="part.type == 'lyric'">{{ part.line }}</template><sup v-if="part.type == 'chord' && showChords">{{ getTransposedChord(part) }}</sup></span>
                         </p>
                     </div>
                 </div>

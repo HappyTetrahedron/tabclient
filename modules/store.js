@@ -23,6 +23,7 @@ const sharps = [1, 3, 6, 8, 10]
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 export const store = reactive({
+    // Song state:
     songlist: [],
     currentSong: {},
     currentSongPath: "",
@@ -30,13 +31,16 @@ export const store = reactive({
     loadingSongList: true,
     songLoaded: false,
 
-    connected: false,
-    server: null,
-
     transpose: 0,
     transposeIndex: 0,
 
+    // UI state:
     navExpanded: true,
+    showChords: true,
+
+    // Session management:
+    connected: false,
+    server: null,
 
     sessionId: "",
     sessionIdInput: "",
@@ -51,7 +55,6 @@ export const store = reactive({
     },
 
     onSongTitlePressed(songId) {
-        console.log("le press")
         if (this.connected) {
             this.sendSongToServer(songId)
         }
@@ -100,6 +103,10 @@ export const store = reactive({
         else {
             this.transposeDown()
         }
+    },
+
+    toggleChords() {
+        this.showChords = !this.showChords;
     },
 
     transposeUp() {

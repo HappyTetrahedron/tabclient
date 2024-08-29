@@ -6,7 +6,6 @@ export function restoreState(store, uri) {
     if (uri.startsWith("/")) {
         uri = uri.substr(1)
     }
-    console.log(uri);
     if (uri.startsWith('session/')) {
         store.connectSessionById(uri.substr(8))
         return

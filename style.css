@@ -72,6 +72,13 @@ a.active {
     color: var(--accent-color-dark);
 }
 
+/* Buttons */
+div#nav-button-div button, div#transpose-button-div button {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
+
 /* Loading indicator */
 
 div.loading {

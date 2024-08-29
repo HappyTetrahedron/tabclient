@@ -90,6 +90,14 @@ p.annotated {
    line-height: 2em;
 }
 
+div.lyrics p.annotated {
+   line-height: 1em;
+}
+
+div.lyrics p.annotated span.lyric {
+   white-space: normal;
+}
+
 p.annotated sup {
     display: inline-block;
     position: relative;
