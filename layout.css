@@ -19,64 +19,71 @@ div#main-content {
    display: flex;
 }
 
-div#navigation {
-   max-width: 200px;
-   z-index: 2;
-}
-
 div#content {
    padding-left: 1em;
 }
 
-div#nav-button-div {
-   position: fixed;
-   top: 1em;
-   left: 1em;
-   z-index: 3;
-   overflow: visible;
-   display: none;
-}
+/* sidepanel */
 
-div#transpose-button-div {
-   position: fixed;
-   top: 1em;
-   right: 1em;
+div#sidepanel {
+   max-width: 200px;
+   padding-right: 1em;
    z-index: 1;
+}
+
+div#control-button-div {
+   position: fixed;
+   top: 1em;
+   right: 1em;
+   z-index: 2;
    overflow: visible;
 }
 
-div#nav-button-div.expanded {
-   right: 1em;
-   left: auto;
+form#session-form {
+   display: flex;
+   flex-wrap: wrap;
+   width: calc(100% - 30px);
+}
+input#session-id {
+   flex-grow: 1;
+   width: 10px;
+}
+
+@media screen and (min-width: 800px) {
+   .hide-desktop {
+      display: none;
+   }
 }
 
 @media screen and (max-width: 800px) {
+   .hide-mobile {
+      display: none!important;
+   }
+   html {
+      overflow-x: hidden;
+   }
    body {
       height: 100%;
+      overflow-x: hidden;
    }
    div#main-content {
       margin-top: 0!important;
    }
 
-   div#navigation {
+   /* sidepanel */
+   div#sidepanel {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: calc(100% - 2em);
+      height: calc(100vh - 2em);
       max-width: none;
-      overflow-x: auto scroll;
+      overflow-x: scroll;
       padding: 1em;
    }
 
-   div#navigation.expanded {
-      width: 100%;
-   }
-   div#navigation.hidden {
+   div#sidepanel.hidden {
       display: none;
-   }
-   div#nav-button-div {
-      display: block;
    }
 }
 

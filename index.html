@@ -17,40 +17,52 @@
 </head>
 <body>
     <div v-scope id="main-content">
-        <div id="nav-button-div" :class="navExpanded ? 'expanded' : 'hidden'">
-            <button @click="toggleNav" id="nav-button">
-                <span v-if="navExpanded">✖</span>
+        <div id="control-button-div">
+            <button @click="toggleChords" id="chords-toggle" class="chords-toggle" :class="{'hide-mobile': panelExpanded}">
+                <span v-if="showChords">🖹</span><span v-else>𝄝</span>
+            </button>
+            <div id="transpose-button-div" v-if="showChords" :class="{'hide-mobile': panelExpanded}">
+                <button @click="onTransposeDownPressed" id="transpose-down" class="transpose">
+                    ▼
+                </button>
+                <span v-if="transposeIndex != 0" id="transpose-index">
+                    {{ transposeIndex }} 5th
+                </span>
+                <button @click="onTransposeUpPressed" id="transpose-up" class="transpose">
+                    ▲
+                </button>
+            </div>
+            <button @click="togglePanel" id="panel-button" class="hide-desktop">
+                <span v-if="panelExpanded">✖</span>
                 <span v-else>☰</span>
             </button>
         </div>
-        <div id="transpose-button-div">
-            <button @click="toggleChords" id="chords-toggle" class="chords-toggle">
-                <span v-if="showChords">🖹</span><span v-else>𝄝</span>
-            </button>
-            <button @click="onTransposeDownPressed" id="transpose-down" class="transpose">
-                ▼
-            </button>
-            <span v-if="transposeIndex != 0" id="transpose-index">
-                {{ transposeIndex }} 5th
-            </span>
-            <button @click="onTransposeUpPressed" id="transpose-up" class="transpose">
-                ▲
-            </button>
-        </div>
-        <div :class="navExpanded ? 'expanded' : 'hidden'" id="navigation">
-            <form v-on:submit="connectSession" autocomplete="off">
-                <input id="session-id" v-model="sessionIdInput" placeholder="Session ID" autocomplete="off" />
-            </form>
-            <p v-for="song in songlist">
-                <a @click="onSongTitlePressed(song.path)">
-                    <span v-if="song.title" class="nav-song-title">
-                        {{song.title}}
-                    </span>
-                    <span v-else class="nav-song-path">
-                        {{song.path}}
-                    </span>
-                </a>
-            </p>
+        <div :class="panelExpanded ? 'expanded' : 'hidden'" id="sidepanel">
+            <div id="session">
+                <div class="header">
+                    <h2 v-if="connected">
+                        <a @click="disconnectFromSession">✖</a>
+                        Session {{ sessionId }}
+                    </h2>
+                </div>
+                <form id="session-form" v-if="!connected" v-on:submit="connectSession" autocomplete="off">
+                    <input id="session-id" v-model="sessionIdInput" placeholder="Session ID" autocomplete="off" />
+                    <button id="session-connect">▶</button>
+                </form>
+                <div id="session-qr"></div>
+            </div>
+            <div id="navigation">
+                <p v-for="song in songlist">
+                    <a @click="onSongTitlePressed(song.path)">
+                        <span v-if="song.title" class="nav-song-title">
+                            {{song.title}}
+                        </span>
+                        <span v-else class="nav-song-path">
+                            {{song.path}}
+                        </span>
+                    </a>
+                </p>
+            </div>
         </div>
         <div id="content">
             <div id="song" v-if="songLoaded">

@@ -26,7 +26,7 @@ div#main-content {
     box-shadow: 0px 0px 10px 0px var(--link-color);
 }
 
-div#navigation {
+div#sidepanel {
     border-right: 1px solid var(--text-soft);
     background-color: var(--text-background);
 }
@@ -40,6 +40,29 @@ div#navigation {
     body {
         background-color: var(--text-background);
     }
+}
+
+/* Content */
+
+h1 {
+    font-size: 1.5em;
+}
+
+h2 {
+    font-size: 1em;
+    color: var(--accent-color)
+}
+
+/* QR Code and Session Title */
+
+div.header h2 {
+    margin: 0;
+    margin-left: 1em;
+    font-size: 1.3em;
+}
+
+div#session-qr img {
+    width: 100%;
 }
 
 /* Chords */
@@ -73,10 +96,14 @@ a.active {
 }
 
 /* Buttons */
-div#nav-button-div button, div#transpose-button-div button {
+div#control-button-div button, div#session button {
     width: 30px;
     height: 30px;
     vertical-align: middle;
+}
+
+div#transpose-button-div {
+    display: inline-block;
 }
 
 /* Loading indicator */

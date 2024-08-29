@@ -2,6 +2,7 @@ import * as Api from "./api.js"
 import * as Ws from "./ws.js"
 import * as Router from "./router.js"
 import {reactive} from "https://unpkg.com/petite-vue@0.3.0/dist/petite-vue.es.js"
+import {QRCode} from "./qrcode.js"
 
 const notes = {
     0: 'C',
@@ -18,9 +19,9 @@ const notes = {
     11: 'B',
 }
 
-const sharps = [1, 3, 6, 8, 10]
+const sharps = [1, 3, 6, 8, 10];
 
-const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export const store = reactive({
     // Song state:
@@ -35,7 +36,7 @@ export const store = reactive({
     transposeIndex: 0,
 
     // UI state:
-    navExpanded: true,
+    panelExpanded: true,
     showChords: true,
 
     // Session management:
@@ -45,14 +46,6 @@ export const store = reactive({
     sessionId: "",
     sessionIdInput: "",
     sessionKey: "",
-
-    sendMessage(event) {
-        event.preventDefault();
-        if (!this.connected) {
-            return;
-        }
-        this.server.send("foo");
-    },
 
     onSongTitlePressed(songId) {
         if (this.connected) {
@@ -119,14 +112,14 @@ export const store = reactive({
         this.transposeIndex--;
     },
 
-    toggleNav() {
-        this.navExpanded = !this.navExpanded
+    togglePanel() {
+        this.panelExpanded = !this.panelExpanded
     },
 
     setCurrentSong(song) {
         this.currentSong = song;
         this.songLoaded = true;
-        this.navExpanded = false;
+        this.panelExpanded = false;
     },
 
     unsetCurrentSong() {
@@ -144,26 +137,41 @@ export const store = reactive({
         this.connected = connected;
     },
 
-    openSession() {
-        let result = '';
-        for (let i = 0; i < 4; i++) {
-            const randomInd = Math.floor(Math.random() * characters.length);
-            result += characters.charAt(randomInd);
-        }
-        this.sessionId = result;
-        Router.pushCurrentUri(`session/${result}`);
-        this.connectWs();
-    },
-
     connectSession(event) {
         event.preventDefault();
-        this.connectSessionById(encodeURIComponent(this.sessionIdInput));
+        let id = encodeURIComponent(this.sessionIdInput.toUpperCase());
+        if (id == "") {
+            for (let i = 0; i < 4; i++) {
+                const randomInd = Math.floor(Math.random() * characters.length);
+                id += characters.charAt(randomInd);
+            }
+        }
+        this.connectSessionById(id);
     },
 
     connectSessionById(sessionid) {
         this.sessionId = sessionid;
         Router.pushCurrentUri(`session/${this.sessionId}`);
         this.connectWs();
+        new QRCode(document.getElementById("session-qr"), {
+            text: window.location.href,
+            colorLight: "#f6f6f6",
+            correctLevel: QRCode.CorrectLevel.L,
+        });
+    },
+
+    onWsDisconnect() {
+        this.connected = false;
+    },
+
+    disconnectFromSession() {
+        if (!this.connected) {
+            return;
+        }
+        this.server.close();
+        this.sessionIdInput = "";
+        document.getElementById("session-qr").innerHTML = "";
+        Router.pushCurrentUri(this.currentSongPath);
     },
 
     updateFromServer(data) {
@@ -208,7 +216,7 @@ export const store = reactive({
                 this.updateFromServer(evt.data);
             }.bind(this);
             this.server.onclose = function() {
-                this.setConnected(false);
+                this.onWsDisconnect();
             }.bind(this);
             this.connected = true;
         }
