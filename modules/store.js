@@ -183,7 +183,13 @@ export const store = reactive({
     },
 
     onWsDisconnect() {
-        this.connected = false;
+        if (this.sessionId == "") {
+            this.connected = false;
+            document.getElementById("session-qr").innerHTML = "";
+        }
+        else {
+            this.connectWs();
+        }
     },
 
     disconnectFromSession() {
@@ -192,6 +198,7 @@ export const store = reactive({
         }
         this.server.close();
         this.sessionIdInput = "";
+        this.sessionId = "";
         document.getElementById("session-qr").innerHTML = "";
         Router.pushCurrentUri(this.currentSongPath);
     },
