@@ -75,7 +75,9 @@
                 <div id="song-lines">
                     <div class="song-line" :class="{'chords': showChords, 'lyrics': !showChords}" v-for="line in currentSong.content">
                         <h2 class="section" :id="'section' + line.index" v-if="line.type == 'section'">
-                            {{ line.text }}
+                            <a @dblclick="onSectionDoubleClick('section' + line.index)">
+                                {{ line.text }}
+                            </a>
                         </h2>
                         <p class="comment" v-if="line.type == 'comment'">
                             {{ line.text }}

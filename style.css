@@ -167,16 +167,16 @@ li {
 
 @media screen and (max-width: 800px) {
 
-::-webkit-scrollbar-track {
-  background: var(--text-background);
-}
+    ::-webkit-scrollbar-track {
+    background: var(--text-background);
+    }
 
-::-webkit-scrollbar-thumb {
-  background: var(--text-soft);
-}
+    ::-webkit-scrollbar-thumb {
+    background: var(--text-soft);
+    }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--link-color);
-}
+    ::-webkit-scrollbar-thumb:hover {
+    background: var(--link-color);
+    }
 
 }

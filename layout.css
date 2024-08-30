@@ -59,15 +59,10 @@ input#session-id {
    .hide-mobile {
       display: none!important;
    }
-   html {
-      overflow-x: hidden;
-   }
-   body {
-      height: 100%;
-      overflow-x: hidden;
-   }
    div#main-content {
       margin-top: 0!important;
+      height: calc(100vh - 2em);
+      overflow-x: scroll;
    }
 
    /* sidepanel */

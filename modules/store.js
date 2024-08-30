@@ -56,6 +56,15 @@ export const store = reactive({
         }
     },
 
+    onSectionDoubleClick(sectionId) {
+        if (this.connected) {
+            this.sendSectionToServer(sectionId);
+        }
+        else {
+            this.scrollToSection(sectionId);
+        }
+    },
+
     async selectSong(songId, skipPush = false) {
         if (!skipPush && !this.connected) {
             Router.pushCurrentUri(songId);
@@ -137,6 +146,19 @@ export const store = reactive({
         this.connected = connected;
     },
 
+    scrollToSection(sectionId) {
+        let el = document.getElementById(sectionId);
+        let main = document.getElementById('main-content');
+        window.scrollTo({
+            top: el.offsetTop,
+            behavior: 'smooth',
+        });
+        main.scrollTo({
+            top: el.offsetTop - 50,
+            behavior: 'smooth',
+        });
+    },
+
     connectSession(event) {
         event.preventDefault();
         let id = encodeURIComponent(this.sessionIdInput.toUpperCase());
@@ -186,6 +208,9 @@ export const store = reactive({
                 this.transposeUp();
             }
         }
+        if (parsed.section) {
+            this.scrollToSection(parsed.section)
+        }
     },
 
     sendSongToServer(songPath) {
@@ -195,6 +220,17 @@ export const store = reactive({
         let data = {
             'transpose': 0,
             'songPath': songPath,
+        }
+        this.server.send(JSON.stringify(data))
+    },
+
+    sendSectionToServer(sectionId) {
+        if (!this.connected) {
+            return
+        }
+        let data = {
+            'transpose': this.transpose,
+            'section': sectionId,
         }
         this.server.send(JSON.stringify(data))
     },
