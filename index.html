@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Source Sans Pro' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Music&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/layout.css" />
     <link rel="stylesheet" href="/style.css" />
     <link rel="icon" type="image/x-icon" href="assets/favicon.png">
@@ -19,16 +21,16 @@
     <div v-scope id="main-content">
         <div id="control-button-div">
             <button @click="toggleChords" id="chords-toggle" class="chords-toggle" :class="{'hide-mobile': panelExpanded}">
-                <span v-if="showChords">🖹</span><span v-else>𝄝</span>
+                <span class="noto-symbols" v-if="showChords">🖹</span><span class="noto-music" v-else>𝄝</span>
             </button>
             <div id="transpose-button-div" v-if="showChords && (!connected || presenting)" :class="{'hide-mobile': panelExpanded}">
-                <button @click="onTransposeDownPressed" id="transpose-down" class="transpose">
+                <button @click="onTransposeDownPressed" id="transpose-down" class="transpose noto-symbols">
                     ▼
                 </button>
                 <span v-if="transposeIndex != 0" id="transpose-index">
                     {{ transposeIndex }} 5th
                 </span>
-                <button @click="onTransposeUpPressed" id="transpose-up" class="transpose">
+                <button @click="onTransposeUpPressed" id="transpose-up" class="transpose noto-symbols">
                     ▲
                 </button>
             </div>
@@ -37,7 +39,7 @@
                     <span v-if="following">⏸</span><span v-else>⏵</span>
                 </button>
             </div>
-            <button @click="togglePanel" id="panel-button" class="hide-desktop">
+            <button @click="togglePanel" id="panel-button" class="hide-desktop noto-symbols">
                 <span v-if="panelExpanded">✖</span>
                 <span v-else>☰</span>
             </button>
@@ -51,7 +53,7 @@
                 </div>
                 <form id="session-form" v-if="!connected" v-on:submit="connectSession" autocomplete="off">
                     <input id="session-id" v-model="sessionIdInput" placeholder="Session ID" autocomplete="off" />
-                    <button id="session-connect">▶</button>
+                    <button id="session-connect" class="noto-symbols">▶</button>
                 </form>
                 <div id="session-qr"></div>
                 <button @click="onPresentPressed" id="present" class="session" :class="{'active': presenting}">
