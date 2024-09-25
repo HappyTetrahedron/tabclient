@@ -31,6 +31,17 @@ div#sidepanel {
     background-color: var(--text-background);
 }
 
+.noto-music {
+  font-family: "Noto Music", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.noto-symbols {
+  font-family: "Noto Sans Symbols 2", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 @media screen and (max-width: 800px) {
     div#main-content {
         border-radius: 0px;
@@ -96,14 +107,22 @@ a.active {
 }
 
 /* Buttons */
-div#control-button-div button, div#session button {
+div#control-button-div button, #session-connect {
     width: 30px;
     height: 30px;
     vertical-align: middle;
 }
 
-div#transpose-button-div {
+div#transpose-button-div, div#session-button-div {
     display: inline-block;
+}
+
+button#present.active {
+    background-color: lightcoral;
+}
+
+button#follow.active {
+    color: darkolivegreen;
 }
 
 /* Loading indicator */

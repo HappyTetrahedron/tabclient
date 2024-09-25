@@ -43,21 +43,31 @@ export const store = reactive({
     connected: false,
     server: null,
 
+    presenting: false,
+    following: true,
+
     sessionId: "",
     sessionIdInput: "",
     sessionKey: "",
 
+    serverState: {
+        songPath: "",
+        transpose: 0,
+        section: "",
+    },
+
     onSongTitlePressed(songId) {
-        if (this.connected) {
-            this.sendSongToServer(songId)
+        if (this.connected && this.presenting) {
+            this.sendSongToServer(songId);
         }
         else {
-            this.selectSong(songId)
+            this.following = false;
+            this.selectSong(songId);
         }
     },
 
     onSectionDoubleClick(sectionId) {
-        if (this.connected) {
+        if (this.connected && this.presenting) {
             this.sendSectionToServer(sectionId);
         }
         else {
@@ -90,7 +100,7 @@ export const store = reactive({
     },
 
     onTransposeUpPressed() {
-        if (this.connected) {
+        if (this.connected && this.presenting) {
             this.sendTransposeToServer((this.transpose + 7) % 12)
         }
         else {
@@ -99,7 +109,7 @@ export const store = reactive({
     },
 
     onTransposeDownPressed() {
-        if (this.connected) {
+        if (this.connected && this.presenting) {
             this.sendTransposeToServer((this.transpose + 5) % 12)
         }
         else {
@@ -129,6 +139,7 @@ export const store = reactive({
         this.currentSong = song;
         this.songLoaded = true;
         this.panelExpanded = false;
+        this.scrollToTop();
     },
 
     unsetCurrentSong() {
@@ -159,6 +170,18 @@ export const store = reactive({
         });
     },
 
+    scrollToTop() {
+        let main = document.getElementById('main-content');
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+        main.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    },
+
     connectSession(event) {
         event.preventDefault();
         let id = encodeURIComponent(this.sessionIdInput.toUpperCase());
@@ -175,6 +198,9 @@ export const store = reactive({
         this.sessionId = sessionid;
         Router.pushCurrentUri(`session/${this.sessionId}`);
         this.connectWs();
+        this.following = true;
+        this.presenting = false;
+        this.showChords = false;
         new QRCode(document.getElementById("session-qr"), {
             text: window.location.href,
             colorLight: "#f6f6f6",
@@ -205,28 +231,51 @@ export const store = reactive({
 
     updateFromServer(data) {
         let parsed = JSON.parse(data)
-        if (parsed.songPath && parsed.songPath != this.currentSongPath) {
-            this.selectSong(parsed.songPath)
+        if (parsed.songPath && parsed.songPath != this.serverState.songPath) {
+            this.serverState.songPath = parsed.songPath;
+            this.serverState.section = "";
         }
-        if (("transpose" in parsed) && parsed.transpose != this.transpose) {
-            this.transpose = 0;
-            this.transposeIndex = 0;
-            while (this.transpose != parsed.transpose) {
-                this.transposeUp();
-            }
+        if ("transpose" in parsed) {
+            this.serverState.transpose = parsed.transpose
         }
         if (parsed.section) {
-            this.scrollToSection(parsed.section)
+            this.serverState.section = parsed.section;
+        }
+
+        if (this.following) {
+            this.localStateFromServer();
         }
     },
 
-    sendSongToServer(songPath) {
+    localStateFromServer() {
+        if (this.currentSongPath != this.serverState.songPath) {
+            this.selectSong(this.serverState.songPath);
+        }
+        if (this.transpose != this.serverState.transpose) {
+            this.transpose = 0;
+            this.transposeIndex = 0;
+            while (this.transpose != this.serverState.transpose) {
+                this.transposeUp();
+            }
+        }
+        if (!!this.serverState.section) {
+            this.scrollToSection(this.serverState.section);
+        }
+    },
+
+    localStateToServer() {
+        this.sendSongToServer(this.currentSongPath, this.transpose);
+    },
+
+
+    sendSongToServer(songPath, transpose=0) {
         if (!this.connected) {
             return
         }
         let data = {
-            'transpose': 0,
+            'transpose': transpose,
             'songPath': songPath,
+            'section': '',
         }
         this.server.send(JSON.stringify(data))
     },
@@ -250,6 +299,26 @@ export const store = reactive({
             'transpose': transpose,
         }
         this.server.send(JSON.stringify(data))
+    },
+
+    onFollowPressed(event) {
+        if (this.presenting) {
+            this.presenting = false;
+        }
+        else {
+            this.following = !this.following;
+            if (this.following) {
+                this.localStateFromServer();
+            }
+        }
+    },
+
+    onPresentPressed(event) {
+        this.presenting = !this.presenting;
+        if (this.presenting) {
+            this.following = true;
+            this.localStateToServer();
+        }
     },
 
     async connectWs() {
