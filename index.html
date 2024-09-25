@@ -35,7 +35,7 @@
                 </button>
             </div>
             <div id="session-button-div" v-if="connected" :class="{'hide-mobile': panelExpanded}">
-                <button @click="onFollowPressed" id="follow" class="session" :class="{'active': following}">
+                <button @click="onFollowPressed" id="follow" class="session noto-symbols" :class="{'active': following}">
                     <span v-if="following">⏸</span><span v-else>⏵</span>
                 </button>
             </div>
@@ -88,9 +88,9 @@
                     <div class="song-line" :class="{'chords': showChords, 'lyrics': !showChords}" v-for="line in currentSong.content">
                         <h2 class="section" :id="'section' + line.index" v-if="line.type == 'section'">
                             <a v-if="presenting" @click="onSectionDoubleClick('section' + line.index)">
-                                ⇨
+                                ⇨ {{ line.text }}
                             </a>
-                            {{ line.text }}
+                            <span v-else>{{ line.text }}</span>
                         </h2>
                         <p class="comment" v-if="line.type == 'comment'">
                             {{ line.text }}

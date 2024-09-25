@@ -200,6 +200,7 @@ export const store = reactive({
         this.connectWs();
         this.following = true;
         this.presenting = false;
+        this.showChords = false;
         new QRCode(document.getElementById("session-qr"), {
             text: window.location.href,
             colorLight: "#f6f6f6",
