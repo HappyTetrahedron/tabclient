@@ -96,14 +96,22 @@ a.active {
 }
 
 /* Buttons */
-div#control-button-div button, div#session button {
+div#control-button-div button, #session-connect {
     width: 30px;
     height: 30px;
     vertical-align: middle;
 }
 
-div#transpose-button-div {
+div#transpose-button-div, div#session-button-div {
     display: inline-block;
+}
+
+button#present.active {
+    background-color: lightcoral;
+}
+
+button#follow.active {
+    color: darkolivegreen;
 }
 
 /* Loading indicator */

@@ -21,7 +21,7 @@
             <button @click="toggleChords" id="chords-toggle" class="chords-toggle" :class="{'hide-mobile': panelExpanded}">
                 <span v-if="showChords">🖹</span><span v-else>𝄝</span>
             </button>
-            <div id="transpose-button-div" v-if="showChords" :class="{'hide-mobile': panelExpanded}">
+            <div id="transpose-button-div" v-if="showChords && (!connected || presenting)" :class="{'hide-mobile': panelExpanded}">
                 <button @click="onTransposeDownPressed" id="transpose-down" class="transpose">
                     ▼
                 </button>
@@ -30,6 +30,11 @@
                 </span>
                 <button @click="onTransposeUpPressed" id="transpose-up" class="transpose">
                     ▲
+                </button>
+            </div>
+            <div id="session-button-div" v-if="connected" :class="{'hide-mobile': panelExpanded}">
+                <button @click="onFollowPressed" id="follow" class="session" :class="{'active': following}">
+                    <span v-if="following">⏸</span><span v-else>⏵</span>
                 </button>
             </div>
             <button @click="togglePanel" id="panel-button" class="hide-desktop">
@@ -41,7 +46,6 @@
             <div id="session">
                 <div class="header">
                     <h2 v-if="connected">
-                        <a @click="disconnectFromSession">✖</a>
                         Session {{ sessionId }}
                     </h2>
                 </div>
@@ -50,6 +54,12 @@
                     <button id="session-connect">▶</button>
                 </form>
                 <div id="session-qr"></div>
+                <button @click="onPresentPressed" id="present" class="session" :class="{'active': presenting}">
+                    <span v-if="presenting">stop presenting</span><span v-else>present</span>
+                </button>
+                <button @click="disconnectFromSession">
+                    disconnect
+                </a>
             </div>
             <div id="navigation">
                 <p v-for="song in songlist">
@@ -75,9 +85,10 @@
                 <div id="song-lines">
                     <div class="song-line" :class="{'chords': showChords, 'lyrics': !showChords}" v-for="line in currentSong.content">
                         <h2 class="section" :id="'section' + line.index" v-if="line.type == 'section'">
-                            <a @dblclick="onSectionDoubleClick('section' + line.index)">
-                                {{ line.text }}
+                            <a v-if="presenting" @click="onSectionDoubleClick('section' + line.index)">
+                                ⇨
                             </a>
+                            {{ line.text }}
                         </h2>
                         <p class="comment" v-if="line.type == 'comment'">
                             {{ line.text }}
