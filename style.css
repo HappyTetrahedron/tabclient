@@ -9,6 +9,7 @@
     --chord-color: var(--accent-color);
     --link-color: #73893f;
     --link-color-dark: #606e39;
+    --link-color-highlight: #9bc735;
 
     --text-background: #f6f6f6;
     --text-soft: #8a9278;
@@ -74,6 +75,17 @@ div.header h2 {
 
 div#session-qr img {
     width: 100%;
+}
+
+/* Song list */
+
+div#navigation span.selected {
+    background-color: var(--accent-color);
+    display: block;
+    border-radius: 3px;
+    padding: 5px;
+    color: black;
+    font-weight: bold;
 }
 
 /* Chords */

@@ -19,6 +19,21 @@ const notes = {
     11: 'B',
 }
 
+const NO_MATCH = "nomatch";
+
+const languages = {
+    "de-ch": "Mundart",
+    "de": "Deutsch",
+    "en": "English",
+    "tp": "toki pona",
+    [NO_MATCH]: "other languages",
+};
+
+const categories = {
+    [NO_MATCH]: "",
+    "christmas": "Weihnachtslieder ",
+};
+
 const sharps = [1, 3, 6, 8, 10];
 
 const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -26,6 +41,7 @@ const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 export const store = reactive({
     // Song state:
     songlist: [],
+    display_songlist: [],
     currentSong: {},
     currentSongPath: "",
 
@@ -151,6 +167,59 @@ export const store = reactive({
 
     setSongList(list){
         this.songlist = list
+        this.createDisplaySongList();
+    },
+
+    createDisplaySongList() {
+        // this utter mess is the product of my sick brain
+        let buckets = {};
+        this.songlist.forEach(song => {
+            let cat = song.category || NO_MATCH;
+            if (!Object.keys(categories).includes(cat.toLowerCase())) {
+                cat = NO_MATCH;
+            }
+            cat = cat.toLowerCase();
+            let lang = song.language || NO_MATCH;
+            if (!Object.keys(languages).includes(lang.toLowerCase())) {
+                if (Object.keys(languages).every(lk => {
+                    if (lang.toLowerCase().startsWith(lk)) {
+                        lang = lk;
+                        return false;
+                    }
+                    return true;
+                })) {
+                    lang = NO_MATCH;
+                }
+            }
+            lang = lang.toLowerCase();
+            let b1 = buckets[cat] || {subs: {}};
+            let b2 = b1.subs[lang] || {};
+            b2.title = categories[cat] + languages[lang];
+            b2.lang = lang;
+            b1.cat = cat;
+            let songs = b2.songs || [];
+            songs.push(song);
+            b2.songs = songs;
+            b1.subs[lang] = b2;
+            buckets[cat] = b1;
+        })
+
+        buckets = Object.values(buckets).sort(function(a, b) {
+            return Object.keys(categories).indexOf(a.cat) - Object.keys(categories).indexOf(b.cat);
+        })
+        buckets = buckets.flatMap(b => Object.values(b.subs).sort(function(a, b) {
+            return Object.keys(languages).indexOf(a.lang) - Object.keys(languages).indexOf(b.lang);
+        }))
+
+        buckets.forEach(sublist => {
+            sublist.songs.sort(function(a, b) {
+                let av = a.title || a.path
+                let bv = b.title || b.path
+                return av < bv ? -1 : av > bv ? 1 : 0
+            })
+        })
+
+        this.display_songlist = buckets;
     },
 
     setConnected(connected) {
