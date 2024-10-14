@@ -89,6 +89,9 @@
                 <p v-if="currentSong.metadata.artist" class="song-artist">
                     {{ currentSong.metadata.artist }}
                 </p>
+                <p v-if="currentSong.metadata.translation" class="song-translator">
+                    Translation: {{ currentSong.metadata.translation }}
+                </p>
                 <div id="song-lines">
                     <div class="song-line" :class="{'chords': showChords, 'lyrics': !showChords}" v-for="line in currentSong.content">
                         <h2 class="section" :id="'section' + line.index" v-if="line.type == 'section'">
