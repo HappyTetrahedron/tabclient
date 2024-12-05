@@ -31,14 +31,6 @@ div#sidepanel {
    z-index: 1;
 }
 
-div#control-button-div {
-   position: fixed;
-   top: 1em;
-   right: 1em;
-   z-index: 2;
-   overflow: visible;
-}
-
 form#session-form {
    display: flex;
    flex-wrap: wrap;
@@ -53,6 +45,21 @@ input#session-id {
    .hide-desktop {
       display: none;
    }
+
+   /* controls */
+   div#control-button-div {
+      position: fixed;
+      top: 4em;
+      left: calc(50vw + 400px + 16px);
+      overflow: visible;
+      padding: 10px;
+      border-radius: 0 10px 10px 0;
+   }
+
+   div#control-button-div, div#transpose-button-div {
+      display: flex;
+      flex-direction: column;
+   }
 }
 
 @media screen and (max-width: 800px) {
@@ -65,6 +72,22 @@ input#session-id {
       overflow-x: scroll;
    }
 
+   /* controls */
+   div#control-button-div {
+      position: fixed;
+      width: calc(100% - 20px);
+      top: 0;
+      left: 0;
+      padding: 10px;
+      z-index: 2;
+   }
+
+   div#control-button-div, div#transpose-button-div {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+   }
+
    /* sidepanel */
    div#sidepanel {
       position: fixed;
@@ -75,6 +98,10 @@ input#session-id {
       max-width: none;
       overflow-x: scroll;
       padding: 1em;
+   }
+
+   div#content, div#sidepanel {
+      margin-top: 50px;
    }
 
    div#sidepanel.hidden {

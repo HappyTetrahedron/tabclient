@@ -74,6 +74,9 @@ export const store = reactive({
 
     onSongTitlePressed(songId) {
         if (this.connected && this.presenting) {
+            if (songId == this.currentSongPath) {
+                this.panelExpanded = false;
+            }
             this.sendSongToServer(songId);
         }
         else {
@@ -162,6 +165,7 @@ export const store = reactive({
         this.songLoaded = false;
         this.currentSong = {};
         this.currentSongPath = "";
+        this.panelExpanded = true;
     },
 
 
@@ -234,7 +238,7 @@ export const store = reactive({
             behavior: 'smooth',
         });
         main.scrollTo({
-            top: el.offsetTop - 50,
+            top: el.offsetTop - 120,
             behavior: 'smooth',
         });
     },

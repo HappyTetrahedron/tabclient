@@ -19,19 +19,19 @@
 </head>
 <body>
     <div v-scope id="main-content">
-        <div id="control-button-div">
+        <div id="control-button-div" :class="{'red': connected && presenting, 'gray': connected && !following}">
             <button @click="toggleChords" id="chords-toggle" class="chords-toggle" :class="{'hide-mobile': panelExpanded}">
                 <span class="noto-symbols" v-if="showChords">🖹</span><span class="noto-music" v-else>𝄝</span>
             </button>
             <div id="transpose-button-div" v-if="showChords && (!connected || presenting)" :class="{'hide-mobile': panelExpanded}">
-                <button @click="onTransposeDownPressed" id="transpose-down" class="transpose noto-symbols">
-                    ▼
+                <button @click="onTransposeUpPressed" id="transpose-up" class="transpose noto-symbols">
+                    ▲
                 </button>
                 <span v-if="transposeIndex != 0" id="transpose-index">
                     {{ transposeIndex }} 5th
                 </span>
-                <button @click="onTransposeUpPressed" id="transpose-up" class="transpose noto-symbols">
-                    ▲
+                <button @click="onTransposeDownPressed" id="transpose-down" class="transpose noto-symbols">
+                    ▼
                 </button>
             </div>
             <div id="session-button-div" v-if="connected" :class="{'hide-mobile': panelExpanded}">
@@ -57,10 +57,10 @@
                 </form>
                 <div id="session-qr"></div>
                 <div id="session-buttons" v-if="connected">
-                    <button @click="onPresentPressed" id="present" class="session" :class="{'active': presenting}">
+                    <button @click="onPresentPressed" id="present" class="session large" :class="{'red': presenting}">
                         <span v-if="presenting">stop presenting</span><span v-else>present</span>
                     </button>
-                    <button @click="disconnectFromSession">
+                    <button @click="disconnectFromSession" class="large red">
                         disconnect
                     </button>
                 </div>

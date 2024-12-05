@@ -13,6 +13,8 @@
 
     --text-background: #f6f6f6;
     --text-soft: #8a9278;
+
+    --warn-red: #d16a51;
 }
 
 /* General styling */
@@ -52,6 +54,22 @@ div#sidepanel {
     body {
         background-color: var(--text-background);
     }
+
+    div#control-button-div {
+        background-color: var(--accent-color);
+    }
+    div#control-button-div.red {
+        background-color: var(--warn-red);
+    }
+    div#control-button-div.gray {
+        background-color: var(--text-soft);
+    }
+}
+
+@media screen and (min-width: 800px) {
+    div#control-button-div {
+        background-color: #00000061;
+    }
 }
 
 /* Content */
@@ -69,12 +87,17 @@ h2 {
 
 div.header h2 {
     margin: 0;
-    margin-left: 1em;
     font-size: 1.3em;
+    text-align: center;
 }
 
 div#session-qr img {
     width: 100%;
+}
+
+div#session-qr {
+    display: flex;
+    justify-content: center;
 }
 
 /* Song list */
@@ -125,16 +148,24 @@ div#control-button-div button, #session-connect {
     vertical-align: middle;
 }
 
-div#transpose-button-div, div#session-button-div {
-    display: inline-block;
-}
-
-button#present.active {
-    background-color: lightcoral;
-}
-
 button#follow.active {
     color: darkolivegreen;
+}
+
+button.large {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--accent-color);
+}
+
+button.large.red {
+    background-color: var(--warn-red);
+}
+
+div#session-buttons {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 /* Loading indicator */
